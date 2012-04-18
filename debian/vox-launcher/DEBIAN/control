@@ -1,0 +1,10 @@
+Package: vox-launcher
+Version: 0.1-1
+Architecture: all
+Maintainer: Pilolli Pietro <pilolli.pietro@gmail.com>
+Installed-Size: 268
+Depends: python-gtk2 (>= 2.16), python-dbus, python-alsaaudio (>= 0.5), python-gobject-2 (>= 2.16), python-simplejson, python-notify, python, python-support (>= 0.90.0)
+Section: python
+Priority: extra
+Homepage: https://github.com/pnegre/python-whiteboard
+Description: Control your desktop with voice

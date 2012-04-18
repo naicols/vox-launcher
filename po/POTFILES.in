@@ -1,0 +1,7 @@
+# Files from the Ardesia distribution which have already been
+# marked to allow runtime translation of messages
+
+[encoding: UTF-8]
+
+src/statusicon.py
+

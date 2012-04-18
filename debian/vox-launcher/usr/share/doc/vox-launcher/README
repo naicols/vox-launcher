@@ -1,0 +1,65 @@
+Introduction
+============
+
+Vox launcher is a simple speech-to-command program in Python that uses Google's Speech
+Recognition facility to convert speech into text and then execute a command, if
+appropriate, on the local machine.
+
+Dependencies
+============
+
+This program is designed to run on Linux and depends on: 
+- python-gtk2(>=2.16)
+- python-dbus
+- python-alsaaudio(>=0.5)
+- python-gobject-2(>=2.16)
+- python-simplejson
+- pynotify
+
+Tested on Ubuntu 11.04.
+
+Execution
+=========
+
+Just run vox-launcher and speak for up to three seconds. The audio will
+be then processed and translated and an action may be taken.
+When the traffic light is red the program is not ready to listen you;
+please wait the green light before speak with the vox launcher.
+
+Examples
+========
+
+vox-launcher can be used to launch processes:
+
+    "open firefox"
+
+Command list
+============
+
+You can read the default command list handled by vox launcher reading the left column
+in your language configuration file (e.g. /etc/vox-launcher/vox_launcher_it.conf).
+If the recognized words are not declared in the con file vox launcher will try to launch
+the recognized text as is.
+
+Customization
+=============
+
+Vox launcher is highly configurable modifying some configuration file located
+under the /etc/vox-launcher folder.
+In order to customize the vox laucher we must edit the the correspondent language file.
+For example to customize the recognition in italian language we can modify the
+/etc/vox-launcher/vox_launcher_it.conf file.
+
+The semantic of the conf file is the simplest as possible following the behavioural 
+stimulus-response pattern:
+
+[detected word] -> [command to run]
+
+e.g.
+browser -> chromium-browser
+
+Voice launcher when will detect the browser world will launch the chromium-browser command.
+You can change the default browser from chromium to firefox simply changing the previous line 
+into:
+
+browser -> firefox

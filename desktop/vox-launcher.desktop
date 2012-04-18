@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Encoding=UTF-8
+Name=vox-launcher
+Icon=vox-launcher.png
+Exec=/usr/bin/vox-launcher
+Categories=Application;Accessibility;Whiteboard
+
