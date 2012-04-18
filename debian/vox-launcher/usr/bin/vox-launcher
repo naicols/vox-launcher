@@ -1,9 +1,0 @@
-#!/bin/bash
-
-STUFFDIR='/usr/share/vox-launcher'
-
-(
-cd $STUFFDIR
-python vox-launcher.py
-)
-
