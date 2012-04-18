@@ -1,0 +1,2 @@
+?package(vox-launcher):needs="X11" section="Applications/Accessibility"\
+  title="Vox-launcher" command="/usr/bin/vox-launcher"

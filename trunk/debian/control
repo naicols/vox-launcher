@@ -1,0 +1,16 @@
+Source: vox-launcher
+Section: python
+Priority: extra
+Maintainer: Pilolli Pietro <pilolli.pietro@gmail.com>
+Build-Depends: python-gtk2-dev(>=2.16), python-gobject-2-dev(>=2.16) 
+X-Python-Version: >= 2.5
+Standards-Version: 3.9.2
+Homepage: https://github.com/pnegre/python-whiteboard
+Uploaders: Pilolli Pietro <pilolli.pietro@gmail.com>
+
+
+Package: vox-launcher
+Architecture: all
+Depends: python-gtk2(>=2.16), python-dbus, python-alsaaudio(>=0.5), python-gobject-2(>=2.16), python-simplejson, python-notify,
+ ${python:Depends}, ${misc:Depends}
+Description: Control your desktop with voice
