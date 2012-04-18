@@ -1,4 +1,12 @@
-TODO
+==========================================================================
+                     ####### ####### ######  #######
+                        #    #     # #     # #     #
+                        #    #     # #     # #     #
+                        #    #     # #     # #     #
+                        #    #     # #     # #     #
+                        #    #     # #     # #     #
+                        #    ####### ######  #######
+==========================================================================
 
 - List the available vox command
 - Add help in menu
@@ -7,33 +15,32 @@ TODO
 - keyboard navigation
 - Emprove recognition accurancy
 
-- vai su (sourceforge)
+- go on (sourceforge)
 
 - Minimize/maximize window so do in easystroke
 - fix redo in libreoffice ctrl+y
-
-- song demo
-- vlc demo
-- mail demo, contacts
 
 - Atspi-2 support
 
 - REBOOT, SHUTDOWN SYSTEM, HIBERNATE, LOCK DESKTOP
 
-browser demo:
-- apri browser
-- scrivi ardesia
-- conferma
-- barra indirizzi
-- seleziona tutto
-- cancella
-- avanti
-- indietro
-- sali
-- scendi
-- scrivi lavagna libera
-- finestra successiva
-- cronologia
-- chiudi scheda
-- prossima scheda
+- Make a browser demo:
+ - apri browser
+ - scrivi ardesia
+ - conferma
+ - barra indirizzi
+ - seleziona tutto
+ - cancella
+ - avanti
+ - indietro
+ - sali
+ - scendi
+ - scrivi lavagna libera
+ - finestra successiva
+ - cronologia
+ - chiudi scheda
+ - prossima scheda
 
+- song demo
+- vlc demo
+- mail demo, contacts
