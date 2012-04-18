@@ -1,0 +1,82 @@
+========================================================
+  ###   #     #  #####  #######    #    #       #
+   #    ##    # #     #    #      # #   #       #
+   #    # #   # #          #     #   #  #       #
+   #    #  #  #  #####     #    #     # #       #
+   #    #   # #       #    #    ####### #       #
+   #    #    ## #     #    #    #     # #       #
+  ###   #     #  #####     #    #     # ####### #######
+========================================================
+
+----------
+ Abstract
+----------
+
+This document explains howto build Ardesia on GNU/Linux.
+If do you want try to build Ardesia on other operating system
+or architecture please refer to the instruction on the wiki page:
+http://code.google.com/p/vox-launcher/w/list
+
+-------
+ Build
+-------
+
+The build system uses the autotools
+
+The compilation requires the following packages:
+- python-gtk2-dev(>=2.16)
+- python-gobject-2-dev(>=2.16)
+- python-dbus
+- python-alsaaudio(>=0.5)
+- python-simplejson
+- python-notify
+
+If you are using ubuntu you can simply run this command: 
+
+  # sudo apt-get install python-gtk2-dev python-gobject-2-dev \
+    python-dbus python-alsaaudio python-simplejson python-notify
+  
+You can compile the tool in the standard way:
+
+  # ./autogen.sh
+  # make
+  # sudo make install
+  
+--------------------------------
+ Make the DEBIAN/UBUNTU package
+--------------------------------
+
+The build of the deb package has these requirements:
+
+- devscripts
+
+You can simply run this command: 
+
+  # sudo apt-get install devscripts
+
+To build the deb package run:
+
+  # make deb
+
+the deb file vox-launcher_xxx-ubuntu-x_all.deb
+will be created
+
+
+-------
+ Info
+-------
+
+  * To get info about the tool, please contact:
+
+      pilolli.pietro@gmail.com
+
+  * To report bugs, please contact:
+
+      pilolli.pietro@gmail.com
+
+
+Enjoy!
+
+===
+EOF
+===
