@@ -31,7 +31,6 @@ VERSION = "0.2"
 AUTHORNAME = "Pilolli Pietro"
 AUTHOREMAIL = "<pilolli.pietro@gmail.com>"
 AUTHOR = AUTHORNAME + ' ' + AUTHOREMAIL
-COMMENT = _("Vox launcher is a simple speech-to-command program.")
 COPYRIGHT_YEAR = '2012'
 COPYRIGHTS = u"Copyright © %s %s" % (COPYRIGHT_YEAR, AUTHORNAME)
 AUTHORS = [
@@ -161,11 +160,12 @@ class StatusIcon( threading.Thread ):
       
         
     def show_about_dialog(self, widget):
-		    about_dialog = gtk.AboutDialog()
-		    about_dialog.set_destroy_with_parent(True)
-		    about_dialog.set_name(APPNAME)
-		    about_dialog.set_version(VERSION)
-		    about_dialog.set_logo_icon_name(APPNAME)
+            COMMENT = _("Vox launcher is a simple speech-to-command program.")
+            about_dialog = gtk.AboutDialog()
+            about_dialog.set_destroy_with_parent(True)
+            about_dialog.set_name(APPNAME)
+            about_dialog.set_version(VERSION)
+            about_dialog.set_logo_icon_name(APPNAME)
             about_dialog.set_copyright(COPYRIGHTS)
             about_dialog.set_license(LICENSE)
             about_dialog.set_authors(AUTHORS)
@@ -173,8 +173,8 @@ class StatusIcon( threading.Thread ):
             about_dialog.set_translator_credits(TRANSLATORS)
             about_dialog.set_website(WEBSITE)
             about_dialog.set_website_label(_("%s's Website") % APPNAME)
-		    about_dialog.run()
-		    about_dialog.destroy()
+            about_dialog.run()
+            about_dialog.destroy()
 
 
 
