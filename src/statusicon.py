@@ -21,10 +21,7 @@ import gtk
 import threading
 import os
 import sys
-import gettext
-pathname = os.path.dirname(sys.argv[0])
-localdir = os.path.abspath(pathname) + "/locale"
-gettext.install("messages", localdir)
+from gettext import gettext as _ 
 
 APPNAME = "vox-launcher"
 VERSION = "0.2"

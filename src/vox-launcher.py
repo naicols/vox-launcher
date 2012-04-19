@@ -24,6 +24,7 @@ import os
 import atexit
 import urllib2
 import statusicon
+import sys
 
 import ProcessText
 import audioop
@@ -37,16 +38,16 @@ import logging
 
 from datetime import datetime
 
+APP_NAME='vox-launcher'
 CHUNK = 1024
 CHANNELS = 1
 RATE = 16000
-WAVE_OUTPUT_FILENAME = '/tmp/vox-launcher-recording.wav'
-FLAC_OUTPUT_FILENAME = '/tmp/vox-launcher-recording.flac'
+WAVE_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.wav'
+FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
 MAXRESULT=6
 lo  = 2000
 hi = 32000
-si = statusicon.StatusIcon()
- 
+si = statusicon.StatusIcon() 
 log_lo = math.log(lo)
 log_hi = math.log(hi)
 
@@ -75,7 +76,7 @@ def send_recv():
     except urllib2.URLError, e:
       error_message = e.reason
       logging.debug( error_message )
-      n = pynotify.Notification("Error", "Vox-launcher can't establish a connection to the server", icon='vox-launcher')
+      n = pynotify.Notification("Error", "Vox-launcher can't establish a connection to the server", APP_NAME)
       n.set_timeout(2000)
       n.show()
      
@@ -211,21 +212,9 @@ def main():
                         break;
                         
 def init_localization():
-  '''prepare l10n'''
-  locale.setlocale(locale.LC_ALL, '') # use user's preferred locale
-  # take first two characters of country code
-  loc = locale.getlocale()
-  filename = "/usr/share/locale/%s/LC_MESSAGES/vox-launcher.mo" % locale.getlocale()[0][0:2]
-  print filename
-
-  try:
-    logging.debug( "Opening message file %s for locale %s", filename, loc[0] )
-    trans = gettext.GNUTranslations(open( filename, "rb" ) )
-  except IOError:
-    logging.debug( "Locale not found. Using default messages" )
-    trans = gettext.NullTranslations()
-
-  trans.install()
+  	LOCALE_DOMAIN = APP_NAME
+  	gettext.textdomain(LOCALE_DOMAIN)
+  	gettext.install(LOCALE_DOMAIN)
                                            
 if __name__ == '__main__':
     init_localization()
