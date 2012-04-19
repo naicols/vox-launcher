@@ -10,16 +10,14 @@
 
 - List the available vox command
 - Add help in menu
-- Conf file editor
-
-- keyboard navigation
-- Emprove recognition accurancy
-
 - go on (sourceforge)
+- keyboard navigation
+- Conf file editor
 
 - Minimize/maximize window so do in easystroke
 - fix redo in libreoffice ctrl+y
 
+- Emprove recognition accurancy
 - Atspi-2 support
 
 - REBOOT, SHUTDOWN SYSTEM, HIBERNATE, LOCK DESKTOP
