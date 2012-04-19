@@ -218,6 +218,7 @@ def init_localization():
                                            
 if __name__ == '__main__':
     init_localization()
+    logging.basicConfig(level=logging.DEBUG)
     pynotify.init("vox-launcher")
     si.start()
     atexit.register(clean_up)

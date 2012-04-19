@@ -84,10 +84,10 @@ def process_text(values, lang):
 
     if len(values)==1:
         text = values[0]
-        logging.debug( 'Result: \'' + text + ' unknown confidence' )
+        logging.debug( "Result \"" + text + "\" with unknown confidence" )
     else:
         confidence, text = values
-        logging.debug( 'Result: \'' + text + '\' with confidence', confidence )
+        logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
 
     # Ignore some token in initial position
     if text.startswith('open') or text.startswith('run') or text.startswith('apri'):

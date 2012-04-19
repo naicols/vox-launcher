@@ -112,6 +112,7 @@ class StatusIcon( threading.Thread ):
             rmItem = gtk.ImageMenuItem(gtk.STOCK_EXECUTE)
         else:
             rmItem = gtk.ImageMenuItem(gtk.STOCK_MEDIA_STOP)
+            
         rmItem.connect('activate', self.onPause)
         rmItem.show()
         menu.append(rmItem)
