@@ -69,9 +69,9 @@ Command list
 ------------
 
 You can read the default command list handled by vox launcher reading the left column
-in your language configuration file (e.g. /etc/vox-launcher/vox_launcher_it.conf).
-If the recognized words are not declared in the con file vox launcher will try to launch
-the recognized text as is.
+of your language configuration file (e.g. /etc/vox-launcher/vox_launcher_it.conf).
+If the recognized words are not declared in the configuration file vox launcher will try 
+to launch the recognized text as is.
 
 Customization
 -------------
