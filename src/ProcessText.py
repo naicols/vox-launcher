@@ -89,6 +89,9 @@ def process_text(values, lang):
         confidence, text = values
         logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
 
+    if len(text)==1:
+        insert_text(text, lang)
+        return True
     # Ignore some token in initial position
     if text.startswith('open') or text.startswith('run') or text.startswith('apri'):
         startpos = text.find(" ") + 1
