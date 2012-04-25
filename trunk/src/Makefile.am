@@ -10,9 +10,10 @@ bin_SCRIPTS = vox-launcher
 vox_launcherdir = $(prefix)/share/vox-launcher
 
 
-vox_launcher_PYTHON = \
+vox_launcher_PYTHON =   \
 	vox-launcher.py \
-	ProcessText.py \
+	grid.py         \
+	ProcessText.py  \
 	statusicon.py
 
 
