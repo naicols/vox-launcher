@@ -47,7 +47,8 @@ FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
 MAXRESULT=6
 lo  = 2000
 hi = 32000
-si = statusicon.StatusIcon() 
+si = statusicon.StatusIcon()
+pt = ProcessText.ProcessText()
 log_lo = math.log(lo)
 log_hi = math.log(hi)
 
@@ -207,7 +208,7 @@ def main():
             
                 for index in range(len(hypotheses)):
                     values = hypotheses[index].values()
-                    retp = ProcessText.process_text(values, si.get_language())
+                    retp = pt.process_text(values, si.get_language())
                     if (retp==True):
                         break;
                         
