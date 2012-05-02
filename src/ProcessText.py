@@ -111,7 +111,7 @@ class ProcessText():
             if self.grid!=None and self.is_grid_running == True:
                self.grid.stop()
             if (self.grid == None):
-                self.grid = grid.Grid()  
+                self.grid = grid.Grid()
             self.grid.start()
             self.is_grid_running = True
             return True
