@@ -11,7 +11,6 @@
 - List the available vox command
 - Add help in menu
 - go on (sourceforge)
-- keyboard navigation
 - Conf file editor
 
 - Minimize/maximize window so do in easystroke
@@ -22,7 +21,7 @@
 
 - REBOOT, SHUTDOWN SYSTEM, HIBERNATE, LOCK DESKTOP
 
-- Make a browser demo:
+- Make a demo surfing on web in italian language:
  - apri browser
  - scrivi ardesia
  - conferma
@@ -38,6 +37,7 @@
  - cronologia
  - chiudi scheda
  - prossima scheda
+ - griglia
 
 - song demo
 - vlc demo
