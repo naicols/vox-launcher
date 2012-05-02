@@ -31,10 +31,43 @@ class Grid( threading.Thread ):
 
     def __init__(self):
         gtk.gdk.threads_init()
+        
         self.display=gtk.gdk.display_get_default()
         self.screen=self.display.get_default_screen()
-        self.screen_height=self.screen.get_height()
         self.screen_width=self.screen.get_width()
+        self.screen_height=self.screen.get_height()
+        
+        self.win = gtk.Window(gtk.WINDOW_POPUP)
+        self.size_x = self.screen_width
+        self.size_y = self.screen_height
+        self.position_x = 0
+        self.position_y = 0
+
+        self.win.set_title("test")
+        self.win.set_app_paintable(True)
+        self.win.set_decorated(False)
+        self.win.set_skip_taskbar_hint(True)
+        self.win.set_accept_focus(True)
+        self.win.set_focus_on_map(True)
+        self.win.set_deletable(False)
+  
+        self.win.set_usize ( self.screen_width, self.screen_height);
+  
+        self.win.set_keep_above(True)
+        
+        # Make the widget aware of the signal to catch.
+        self.win.set_events(gtk.gdk.KEY_PRESS_MASK)
+        
+        # Connect the callback on_key_press to the signal key_press.
+        self.win.connect("key_press_event", self.on_key_press)
+        self.win.connect("delete-event", gtk.main_quit)
+        self.win.connect("expose-event", self.expose)
+        self.win.connect("screen-changed", self.screen_changed)
+
+        self.win.add_events(gdk.BUTTON_PRESS_MASK)
+        self.win.connect('button-press-event', self.clicked)
+  
+        self.screen_changed(self.win)
         threading.Thread.__init__ ( self )
 
     def screen_changed(self, widget, old_screen = None):
@@ -52,40 +85,6 @@ class Grid( threading.Thread ):
         
     def run(self):
         gtk.gdk.threads_enter()
-
-        self.win = gtk.Window(gtk.WINDOW_POPUP)
-        self.size_x = 0
-        self.size_y = 0
-        self.position_x = 0
-        self.position_y = 0
-
-        self.win.set_title("test")
-        self.win.set_app_paintable(True)
-        self.win.set_decorated(False)
-        self.win.set_skip_taskbar_hint(True)
-        self.win.set_accept_focus(True)
-        self.win.set_focus_on_map(True)
-        self.win.set_deletable(False)
-  
-        self.win.set_usize ( self.screen_width, self.screen_height);
-  
-        self.size_x = self.screen_width
-        self.size_y = self.screen_height
-        self.win.set_keep_above(True)
-        
-        # Make the widget aware of the signal to catch.
-        self.win.set_events(gtk.gdk.KEY_PRESS_MASK)
-        
-        # Connect the callback on_key_press to the signal key_press.
-        self.win.connect("key_press_event", self.on_key_press)
-        self.win.connect("delete-event", gtk.main_quit)
-        self.win.connect("expose-event", self.expose)
-        self.win.connect("screen-changed", self.screen_changed)
-
-        self.win.add_events(gdk.BUTTON_PRESS_MASK)
-        self.win.connect('button-press-event', self.clicked)
-  
-        self.screen_changed(self.win)
        
         self.win.show_all()
         self.win.fullscreen()
@@ -176,7 +175,6 @@ class Grid( threading.Thread ):
         gtk.main_quit()
 
     def stop(self):
-        gtk.main_quit()
         self.win.destroy()
 
 
