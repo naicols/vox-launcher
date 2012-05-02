@@ -24,6 +24,7 @@ import threading
 import gobject
 import gtk
 import cairo
+import math
 from gtk import gdk
 
 
@@ -99,12 +100,14 @@ class Grid( threading.Thread ):
         delta_x= self.position_x + ((i *2 + 1) * self.size_x)/6
         delta_y= self.position_y + ((j *2 + 1) * self.size_y)/6
         cr.set_source_rgba(1, 0, 0, 0.5)
-        cr.select_font_face("Georgia",
+        cr.select_font_face("Purisa",
         cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
-        cr.set_font_size(letter_x/5)
+        font_size = math.sqrt(pow(letter_x, 2) + pow(letter_y, 2))
+        cr.set_font_size(font_size)
+        
         text = str(i+1 +(j*3))
         x_bearing, y_bearing, width, height = cr.text_extents(text)[:4]
-        cr.move_to(delta_x - x_bearing, delta_y - y_bearing)
+        cr.move_to(delta_x - x_bearing - width / 2, delta_y - y_bearing - height / 2)
         cr.show_text(text)
         cr.stroke()  
 
