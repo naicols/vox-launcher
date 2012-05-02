@@ -31,12 +31,28 @@ class Grid( threading.Thread ):
 
     def __init__(self):
         gtk.gdk.threads_init()
-  
         self.display=gtk.gdk.display_get_default()
         self.screen=self.display.get_default_screen()
         self.screen_height=self.screen.get_height()
         self.screen_width=self.screen.get_width()
-  
+        threading.Thread.__init__ ( self )
+
+    def screen_changed(self, widget, old_screen = None):
+        # To check if the display supports alpha channels, get the colormap
+        screen = widget.get_screen()
+        colormap = screen.get_rgba_colormap()
+        if colormap == None:
+            print 'Your screen does not support alpha channels!'
+            exit()
+    
+        # Now we have a colormap appropriate for the screen, use it
+        widget.set_colormap(colormap)
+    
+        return False
+        
+    def run(self):
+        gtk.gdk.threads_enter()
+
         self.win = gtk.Window(gtk.WINDOW_POPUP)
         self.size_x = 0
         self.size_y = 0
@@ -57,31 +73,11 @@ class Grid( threading.Thread ):
         self.size_y = self.screen_height
         self.win.set_keep_above(True)
         
-        threading.Thread.__init__ ( self )
-
-    def screen_changed(self, widget, old_screen = None):
-    
-        # To check if the display supports alpha channels, get the colormap
-        screen = widget.get_screen()
-        colormap = screen.get_rgba_colormap()
-        if colormap == None:
-            print 'Your screen does not support alpha channels!'
-            exit()
-        else:
-            print 'Your screen supports alpha channels!'
-    
-        # Now we have a colormap appropriate for the screen, use it
-        widget.set_colormap(colormap)
-    
-        return False
-        
-    def run(self):
         # Make the widget aware of the signal to catch.
         self.win.set_events(gtk.gdk.KEY_PRESS_MASK)
         
         # Connect the callback on_key_press to the signal key_press.
         self.win.connect("key_press_event", self.on_key_press)
-
         self.win.connect("delete-event", gtk.main_quit)
         self.win.connect("expose-event", self.expose)
         self.win.connect("screen-changed", self.screen_changed)
@@ -90,11 +86,12 @@ class Grid( threading.Thread ):
         self.win.connect('button-press-event', self.clicked)
   
         self.screen_changed(self.win)
-
+       
         self.win.show_all()
         self.win.fullscreen()
-        gtk.gdk.threads_enter()
+        
         gtk.main()
+        
         gtk.gdk.threads_leave() 
                
     def put_label(self, cr, i, j):
@@ -179,6 +176,7 @@ class Grid( threading.Thread ):
         gtk.main_quit()
 
     def stop(self):
+        gtk.main_quit()
         self.win.destroy()
 
 
