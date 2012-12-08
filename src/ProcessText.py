@@ -60,7 +60,6 @@ class ProcessText():
                     if t == exp:
                         command = temp[1].strip()
                         n = pynotify.Notification("Info", prefix + " " + exp, icon='vox-launcher')
-                        n.set_urgency(pynotify.URGENCY_CRITICAL)
                         n.set_timeout(1000)
                         n.show()
                         file.close()
