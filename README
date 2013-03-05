@@ -43,10 +43,11 @@ This program is designed to run on Linux and depends on:
 - python-gobject-2(>=2.16)
 - python-simplejson
 - pynotify
+- speech-dispatcher
 
 If you are using ubuntu you can simply run this command: 
 
-  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify
+  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify speech-dispatcher
  
  
 -------
