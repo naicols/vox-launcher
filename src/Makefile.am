@@ -13,6 +13,7 @@ vox_launcherdir = $(prefix)/share/vox-launcher
 vox_launcher_PYTHON =   \
 	vox-launcher.py \
 	grid.py         \
+	sparql.py       \
 	ProcessText.py  \
 	statusicon.py
 

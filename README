@@ -73,6 +73,15 @@ of your language configuration file (e.g. /etc/vox-launcher/vox_launcher_it.conf
 If the recognized words are not declared in the configuration file vox launcher will try 
 to launch the recognized text as is.
 
+Query/Answering
+---------------
+If the recognized test is not a command the program interpret your request as a query and it try
+to answer using wikipedia data.
+
+Now you can also make query with these type:
+- Who is xxx (e.g. Who is Barack Obama)
+- What is xxx (e.g. What is freemasonry?)
+
 Vocal pointer
 -------------
 

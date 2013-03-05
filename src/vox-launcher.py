@@ -89,7 +89,7 @@ def capture_audio(inp):
     chunk = 0
     volume = 0
     volume_threshold = 1
-    silence_threshold = 8
+    silence_threshold = 24
     silence_counter = 0
     
     si.change_status(True)
