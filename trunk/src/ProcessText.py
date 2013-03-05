@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#-*- coding: utf-8 -*-
 #
 # ProcessText.py
 # Copyright (C) Pilolli 2012 <pilolli.pietro@gmail.com>
@@ -22,7 +23,7 @@ import subprocess
 import pynotify
 import logging
 import grid
-
+import sparql
 
 
 class ProcessText():
@@ -30,6 +31,7 @@ class ProcessText():
     def __init__(self):
         self.is_grid_running = False
         self.grid = grid.Grid() 
+        self.sparql = sparql.Sparql()
 
     def insert_text(self, t, lang):
         command =  "xte \"str " + t + "\""    
@@ -133,4 +135,13 @@ class ProcessText():
                 self.grid.stop()
                 self.grid = None
                 self.is_grid_running = False
-            return status
+            if (status == False):
+              t = text
+              if text.startswith('chi è') or text.startswith('cosa è'):
+                startpos = text.find("è") + 2
+                t = text[startpos:]
+              if text.startswith('who is') or text.startswith('what is'):
+                startpos = text.find("is") + 2
+                t = text[startpos:]
+              status = self.sparql.run(t, lang[:2])
+              return status

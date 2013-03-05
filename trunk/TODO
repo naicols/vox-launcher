@@ -11,15 +11,15 @@
 - List the available vox command
 - Add help in menu
 - go on (sourceforge)
-- Conf file editor
-
-- Minimize/maximize window so do in easystroke
-- fix redo in libreoffice ctrl+y
 
 - Emprove recognition accurancy
 - Atspi-2 support
 
 - REBOOT, SHUTDOWN SYSTEM, HIBERNATE, LOCK DESKTOP
+- fix redo in libreoffice ctrl+y
+- Minimize/maximize window so do in easystroke
+
+- Conf file editor
 
 - Make a demo surfing on web in italian language:
  - apri browser
