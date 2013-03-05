@@ -78,9 +78,13 @@ Query/Answering
 If the recognized test is not a command the program interpret your request as a query and it try
 to answer using wikipedia data.
 
-Now you can also make query with these type:
-- Who is xxx (e.g. Who is Barack Obama)
-- What is xxx (e.g. What is freemasonry?)
+Now you can make query with these type:
+- Who is <Name Surmane>? (e.g. Who is Barack Obama?)
+- What is <search query>? (e.g. What is Freemasonry?)
+
+also these shortly form are allowed:
+- <Name Surname> (e.g. Barack Obama)
+- <search query> (e.g. Freemasonry)
 
 Vocal pointer
 -------------
