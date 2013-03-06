@@ -39,6 +39,7 @@ class Sparql():
 
     sparql.setQuery(query)
     res = sparql.query()
+    
     if len(res.bindings)>0:
       res = res.bindings[0]['result'].value
       print res
@@ -46,6 +47,7 @@ class Sparql():
       print "@" + command + "@"
       os.system(command)
       return True
+      
     return False
       
 

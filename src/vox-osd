@@ -1,0 +1,136 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+# Shows a launch notification box in an OSD manner
+#
+# $ launcher-osd [--splash IMAGEPATH] TEXT
+#
+# Author: JM. Philippe <jean-michel.philippe@doudoulinux.org>
+#################################
+# This file is part of DoudouLinux.
+#
+# DoudouLinux is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# DoudouLinux is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with DoudouLinux.  If not, see <http://www.gnu.org/licenses/>.
+
+# importations
+import gtk, sys, os, math
+
+# get option
+if sys.argv[1] == "--splash":
+	IMAGE = sys.argv[2]
+	TEXT = sys.argv[3]
+	if not os.path.isfile(IMAGE):
+		print "WARNING: unable to find", IMAGE
+		IMAGE = None
+else:
+	TEXT = sys.argv[1]
+	IMAGE = None
+
+# window icon file shown using ALT+TAB
+ICON = os.path.join(os.path.dirname(sys.argv[0]), 'throbber.gif')
+if not os.path.isfile(ICON):
+	ICON = "/usr/share/unique-launch/icons/throbber.gif"
+if not os.path.isfile(ICON):
+	ICON = None
+
+#######################
+class MainWindow(gtk.Window):
+
+	def reshaperect(self, obj, allocation):    
+        	"""Shape the window into a rounded rectangle."""
+        	w,h = allocation.width, allocation.height
+        	bitmap = gtk.gdk.Pixmap(None, w, h, 1)
+
+        	# Clear the bitmap
+        	fg = gtk.gdk.Color(pixel=0)
+        	bg = gtk.gdk.Color(pixel=-1)
+        	fg_gc = bitmap.new_gc(foreground=fg, background=bg)
+        	bitmap.draw_rectangle(fg_gc, True, 0, 0, w, h)
+
+       		# Draw our shape into the pixmap using cairo
+        	# Let's try drawing a rectangle with rounded edges.
+        	padding=5 # Padding from the edges of the window
+        	rounded=10 # How round to make the edges
+        	cr = bitmap.cairo_create()
+        	cr.set_source_rgb(0,0,0)
+        	# Move to top corner
+        	cr.move_to(0+padding+rounded, 0+padding)
+
+        	# Top right corner and round the edge
+        	cr.line_to(w-padding-rounded, 0+padding)
+        	cr.arc(w-padding-rounded, 0+padding+rounded, rounded, math.pi/2, 0)
+        	# Bottom right corner and round the edge
+        	cr.line_to(w-padding, h-padding-rounded)
+        	cr.arc(w-padding-rounded, h-padding-rounded, rounded, 0, math.pi/2)
+        	# Bottom left corner and round the edge.
+        	cr.line_to(0+padding+rounded, h-padding)
+        	cr.arc(0+padding+rounded, h-padding-rounded, rounded, math.pi+math.pi/2, math.pi)
+        	# Top left corner and round the edge
+        	cr.line_to(0+padding, 0+padding+rounded)
+        	cr.arc(0+padding+rounded, 0+padding+rounded, rounded, math.pi/2, 0)
+        	# Fill in the shape.
+        	cr.fill()
+
+        	# Set the window shape
+        	self.shape_combine_mask(bitmap, 0, 0)
+        	self.show_all()
+
+	def __init__(self, Text, splash=None, fontsize=20, vpadding=20, hpadding=50, spacing=10):
+		super(MainWindow, self).__init__()
+
+		# no window border
+		self.set_decorated(False)
+		# position center
+		self.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+                # change background color
+                style = self.get_style()
+                color = style.bg[gtk.STATE_SELECTED]
+                self.modify_bg(gtk.STATE_NORMAL, color)
+		# window icon
+		if ICON is not None:
+			self.set_icon_from_file(ICON)
+		
+		# create the throbber image and the label
+		self.throbber = None
+		self.label = None
+		if splash is not None and os.path.isfile(splash):
+			self.throbber = gtk.Image()
+			self.throbber.set_from_file(splash)
+		if len(Text.strip()):
+			self.label = gtk.Label()
+            # set the label color in the markup
+			self.label.set_markup("<span" ' color="#FFFFFF"' "font_desc=\"%d.0\">%s</span>" % (fontsize, Text))
+		
+		# place them horizontally
+		self.hbox = gtk.HBox(spacing=spacing)
+		if self.throbber is not None:
+			self.hbox.pack_start(self.throbber)
+		if self.label is not None:
+			self.hbox.pack_start(self.label)
+		
+		# put extra space in the window
+		self.align = gtk.Alignment()
+		self.align.set_padding(vpadding, vpadding, hpadding, hpadding)
+		self.align.add(self.hbox)
+		self.add(self.align)
+		self.show_all()
+                x,y,w,h = self.get_allocation()
+        	self.set_size_request(w,h)
+        	self.connect('size-allocate', self.reshaperect)
+		self.show_all()
+        
+#######################
+if __name__ == "__main__":
+	w = MainWindow(TEXT, splash=IMAGE, fontsize=20, vpadding=20, hpadding=50, spacing=10)
+	w.show()
+	gtk.main()

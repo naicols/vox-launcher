@@ -28,14 +28,17 @@ import sparql
 
 class ProcessText():
 
+
     def __init__(self):
         self.is_grid_running = False
         self.grid = grid.Grid() 
         self.sparql = sparql.Sparql()
 
+
     def insert_text(self, t, lang):
         command =  "xte \"str " + t + "\""    
         os.system(command)
+
 
     def google_search(self, t):
         command = "xdg-open \"https://www.google.com/search?q=" + t + "&btnI\""
@@ -47,6 +50,7 @@ class ProcessText():
             if os.path.isfile(os.path.join(p, fname)):
                 return True
         return False
+
 
     def get_matching_command(self, t, lang, prefix):
         fileName = '/etc/vox-launcher/vox-launcher_' + lang + '.conf'
@@ -66,9 +70,6 @@ class ProcessText():
                     exp = temp[0].strip()
                     if t == exp:
                         command = temp[1].strip()
-                        n = pynotify.Notification("Info", prefix + " " + exp, icon='vox-launcher')
-                        n.set_timeout(1000)
-                        n.show()
                         file.close()
                         return command
                 else:
@@ -76,6 +77,7 @@ class ProcessText():
 
         file.close()
         return ""
+
 
     def open_program(self, t, lang, prefix):
         command = t
@@ -86,23 +88,16 @@ class ProcessText():
         
         logging.debug( "Command " + command )
         progname = command.split(" ")[0]
+        
         if self.program_exists(progname):
             subprocess.Popen(command, shell=True)
             return True
         
         return False
+   
             
-    def process_text(self, values, lang):
-        ''' Take in a tuple of the confidence and result and do the appropriate 
-            action or also the text'''
-
-        if len(values)==1:
-            text = values[0]
-            logging.debug( "Result \"" + text + "\" with unknown confidence" )
-        else:
-            confidence, text = values
-            logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
-
+    def process_text(self, text, lang):
+    
         if len(text)==1:
             if self.is_grid_running == True:
                 if '0' <= text[:1] <= '9':
@@ -126,7 +121,8 @@ class ProcessText():
         if text.startswith('open ') or text.startswith('run ') or text.startswith('apri '):
             startpos = text.find(" ") + 1
             t = text[startpos:]
-            return self.open_program(t, lang, text.split(" ")[0].strip())
+            ret = self.open_program(t, lang, text.split(" ")[0].strip())
+            return ret
         # Keyword in order to go to a web page
         elif text.startswith('vai su ') or text.startswith('go to '):
             startpos = text.find(" ") + 1
@@ -157,4 +153,4 @@ class ProcessText():
                 startpos = text.find("is ") + 1
                 t = text[startpos:]
               status = self.sparql.run(t, lang[:2])
-              return status
+            return status
