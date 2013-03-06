@@ -79,13 +79,35 @@ Query/Answering
 If the recognized test is not a command the program interpret your request as a query and it try
 to answer using wikipedia data.
 
-Now you can make query with these type:
+Now you can make query with these formats:
 - Who is <Name Surmane>? (e.g. Who is Barack Obama?)
 - What is <search query>? (e.g. What is Freemasonry?)
+
+In italian language
+- Chi è <Nome Cognome> (es. Chi è Beppe Grillo?)
+- Cosa è <Soggetto> (es. Cosa è Massoneria?)
 
 also these shortly form are allowed:
 - <Name Surname> (e.g. Barack Obama)
 - <search query> (e.g. Freemasonry)
+
+Fast web access
+---------------
+
+You can open website whith this command:
+- Go to "website" (e.g. Go to wikipedia)
+
+In italian language:
+- Vai su <sito web> (es. Vai su wikipedia)
+
+Text Insertion
+--------------
+
+You can insert text with this vocal command:
+- Write <string to be written> (e.g. Write George Washinghton)
+
+In italian language:
+- Scrivi <frase da srivere> (e.g. Scrivi Giuseppe Garibaldi)
 
 Vocal pointer
 -------------

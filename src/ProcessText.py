@@ -37,6 +37,11 @@ class ProcessText():
         command =  "xte \"str " + t + "\""    
         os.system(command)
 
+    def google_search(self, t):
+        command = "xdg-open \"https://www.google.com/search?q=" + t + "&btnI\""
+        os.system(command)
+    
+     
     def program_exists(self, fname):
         for p in os.environ['PATH'].split(os.pathsep):
             if os.path.isfile(os.path.join(p, fname)):
@@ -118,12 +123,20 @@ class ProcessText():
             return True
                 
         # Ignore some token in initial position
-        if text.startswith('open') or text.startswith('run') or text.startswith('apri'):
+        if text.startswith('open ') or text.startswith('run ') or text.startswith('apri '):
             startpos = text.find(" ") + 1
             t = text[startpos:]
             return self.open_program(t, lang, text.split(" ")[0].strip())
+        # Keyword in order to go to a web page
+        elif text.startswith('vai su ') or text.startswith('go to '):
+            startpos = text.find(" ") + 1
+            t = text[startpos:]
+            startpos = t.find(" ") + 1
+            t = t[startpos:]
+            self.google_search(t);
+            return True
         # Keyword in order to write with vocal keyboard
-        elif text.startswith('scrivi') or text.startswith('write'):
+        elif text.startswith('scrivi ') or text.startswith('write '):
             startpos = text.find(" ") + 1
             t = text[startpos:]
             self.insert_text(t, lang)
@@ -137,11 +150,11 @@ class ProcessText():
                 self.is_grid_running = False
             if (status == False):
               t = text
-              if text.startswith('chi è') or text.startswith('cosa è'):
-                startpos = text.find("è") + 2
+              if text.startswith('chi è ') or text.startswith('cosa è '):
+                startpos = text.find("è ") + 1
                 t = text[startpos:]
               if text.startswith('who is') or text.startswith('what is'):
-                startpos = text.find("is") + 2
+                startpos = text.find("is ") + 1
                 t = text[startpos:]
               status = self.sparql.run(t, lang[:2])
               return status
