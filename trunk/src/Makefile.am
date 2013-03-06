@@ -4,7 +4,7 @@
 
 
 ## The main script
-bin_SCRIPTS = vox-launcher
+bin_SCRIPTS = vox-launcher vox-osd
 
 ## Directory where .class files will be installed
 vox_launcherdir = $(prefix)/share/vox-launcher

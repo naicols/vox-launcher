@@ -25,6 +25,8 @@ import atexit
 import urllib2
 import statusicon
 import sys
+import signal
+import shlex, subprocess
 
 import ProcessText
 import audioop
@@ -35,6 +37,8 @@ import pynotify
 import gettext
 import locale
 import logging 
+
+
 
 from datetime import datetime
 
@@ -47,8 +51,8 @@ FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
 MAXRESULT=6
 lo  = 2000
 hi = 32000
-si = statusicon.StatusIcon()
-pt = ProcessText.ProcessText()
+status_icon = statusicon.StatusIcon()
+text_processor = ProcessText.ProcessText()
 log_lo = math.log(lo)
 log_hi = math.log(hi)
 
@@ -56,12 +60,36 @@ def clean_up():
     ''' Clean up, clean up, everybody do your share '''
     os.remove(FLAC_OUTPUT_FILENAME)
 
+
+def report_start_recognition():
+    command = 'vox-osd --splash icons/throbber.gif "Performing Recognition"'
+    args = shlex.split(command)
+    process = subprocess.Popen(args)
+    return process
+
+
+def report_stop_recognition(process):
+    if (process != None):
+       process.kill()
+
+
+def report_failure(msg):
+    n = pynotify.Notification("Error", msg, icon='vox-launcher')
+    n.set_timeout(1000)
+    n.show()
+    
+    
+def report_success(msg):
+    n = pynotify.Notification("Info", "Done", icon='vox-launcher')
+    n.set_timeout(1000)
+    n.show()
+
 def send_recv():
     ''' Encode, send, and receive FLAC file '''
     audio = open(FLAC_OUTPUT_FILENAME, 'rb').read()
     filesize = os.path.getsize(FLAC_OUTPUT_FILENAME)
     
-    HTTP_ADDRESS = 'http://www.google.com/speech-api/v1/recognize?lang=' + si.get_language() + '&maxresults=' + str(MAXRESULT)
+    HTTP_ADDRESS = 'http://www.google.com/speech-api/v1/recognize?lang=' + status_icon.get_language() + '&maxresults=' + str(MAXRESULT)
     req = urllib2.Request(url=HTTP_ADDRESS)
     req.add_header('Content-type','audio/x-flac; rate=16000')
     req.add_header('Content-length', str(filesize))
@@ -73,13 +101,11 @@ def send_recv():
       
     except urllib2.HTTPError, e:
       error_message = e.read()
-      logging.debug( error_message.lower().split('<title>')[1].split('</title>')[0])
+      logging.debug(error_message.lower().split('<title>')[1].split('</title>')[0])
     except urllib2.URLError, e:
       error_message = e.reason
-      logging.debug( error_message )
-      n = pynotify.Notification("Error", "Vox-launcher can't establish a connection to the server", APP_NAME)
-      n.set_timeout(2000)
-      n.show()
+      logging.debug(error_message)
+      report_failure("Vox-launcher can't establish a connection to the server")
      
     return ""
     
@@ -92,13 +118,21 @@ def capture_audio(inp):
     silence_threshold = 24
     silence_counter = 0
     
-    si.change_status(True)
+    status_icon.change_status(True)
 
-    while(not si.is_paused()):
+    while(not status_icon.is_paused()):
 
-        _, data = inp.read()
+        l, data = inp.read()
+        
+        if (not l or len(data)==0):
+            continue
+            
         # transform data to logarithmic scale
-        peak = audioop.max(data, 2)
+        try:
+           peak = audioop.max(data, 2)
+        except:
+           continue
+           
         vu = (math.log(float(max(peak,1)))-log_lo)/(log_hi-log_lo)
         
         # transform the scale in the range 0...10
@@ -124,13 +158,13 @@ def capture_audio(inp):
             
         volume = current_volume
 
-        si.change_status(False)
+        status_icon.change_status(False)
         chunk = chunk + 1
         sound.append(data)
         time.sleep (RATE / CHUNK / 1000.0);
 
-    if si.is_paused():
-        si.change_status(False)
+    if status_icon.is_paused():
+        status_icon.change_status(False)
     
     logging.debug( "Recorded " + str(chunk) + "\n" )
     
@@ -156,13 +190,43 @@ def setup_mic():
     inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
     inp.setperiodsize(CHUNK)
     return inp
+
+
+def handle_response(resp):
+    if resp =="":
+        report_failure("Unrecognized command")
+    else:
+        try:
+            hypotheses = json.loads(resp)['hypotheses']
+        except json.decoder.JSONDecodeError:
+            logging.debug( "No response received. Are you beyond a firewall?" )
+            report_error("No response received. Are you beyond a firewall?")
+            return       
+            
+        for index in range(len(hypotheses)):
+            values = hypotheses[index].values()
+                    
+            if len(values)==1:
+                  text = values[0]
+                  logging.debug( "Result \"" + text + "\" with unknown confidence" )
+            else:
+                  confidence, text = values
+                  logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
+            
+            retp = text_processor.process_text(text, status_icon.get_language())
+                    
+            if (retp==True):
+                report_success(text)
+                return;
+
+        report_failure("Unrecognized command")
     
 def main():
     # Setup microphone
     inp = setup_mic()
         
     while (1):
-        if si.is_paused():
+        if status_icon.is_paused():
             continue;
             
         ''' Run through process of getting, converting, sending/receiving, and 
@@ -193,24 +257,17 @@ def main():
             tend = datetime.now()
             logging.debug( "Finish flac reencoding " + str(tend - tstart) )
             
+            process = report_start_recognition()
+            
             # Send and receive translation
             resp = send_recv()
+            tend = datetime.now()
+            logging.debug( "Get google response " + str(tend - tstart) )
             
-            if resp !="":
-                try:
-                  hypotheses = json.loads(resp)['hypotheses']
-                except json.decoder.JSONDecodeError:
-                  logging.debug( "No response received. Are you beyond a firewall?" )
-                  continue        
-                
-                tend = datetime.now()
-                logging.debug( "Get google response " + str(tend - tstart) )
-            
-                for index in range(len(hypotheses)):
-                    values = hypotheses[index].values()
-                    retp = pt.process_text(values, si.get_language())
-                    if (retp==True):
-                        break;
+            report_stop_recognition(process)
+          
+            handle_response(resp)
+                        
                         
 def init_localization():
   	LOCALE_DOMAIN = APP_NAME
@@ -221,6 +278,6 @@ if __name__ == '__main__':
     init_localization()
     logging.basicConfig(level=logging.DEBUG)
     pynotify.init("vox-launcher")
-    si.start()
+    status_icon.start()
     atexit.register(clean_up)
     main()
