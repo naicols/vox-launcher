@@ -12,14 +12,11 @@
 - Sound feedback
 - List the available vox command
 - Add help in menu
-- go on (sourceforge)
-
 - Emprove recognition accurancy
-- Atspi-2 support
-
-- REBOOT, SHUTDOWN SYSTEM, HIBERNATE, LOCK DESKTOP
-- fix redo in libreoffice ctrl+y
 - Minimize/maximize window so do in easystroke
+- Atspi-2 support
+- LOCK DESKTOP, REBOOT, SHUTDOWN SYSTEM, HIBERNATE
+- fix redo in libreoffice ctrl+y
 
 - Conf file editor
 
