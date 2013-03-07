@@ -56,7 +56,7 @@ If you are using ubuntu you can simply run this command:
 
 Just run vox-launcher and speak!
 Wait a bit and the related action will be done.
-When the traffic light is red the program is not ready to listen you;
+When the microphone in panel's notification area is red the program is not ready to listen you;
 please wait the green light before speak an other time.
 
 Examples

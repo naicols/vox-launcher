@@ -37,13 +37,13 @@ class Reporter():
 
 
   def report_failure(self, msg):
-    n = pynotify.Notification("Error", msg, icon='vox-launcher')
+    n = pynotify.Notification("Error", msg, 'dialog-error')
     n.set_timeout(1000)
     n.show()
     
     
   def report_success(self, msg):
-    n = pynotify.Notification("Info", "Done", icon='vox-launcher')
+    n = pynotify.Notification("Info", "Done",'dialog-information')
     n.set_timeout(1000)
     n.show()
 
