@@ -24,23 +24,19 @@ import os
 import atexit
 import urllib2
 import statusicon
-import sys
-import signal
-import shlex, subprocess
 
 import ProcessText
 import audioop
 import math
 import time
 import gtk
-import pynotify
 import gettext
 import locale
-import logging 
-
-
+import logging
+import reporter
 
 from datetime import datetime
+
 
 APP_NAME='vox-launcher'
 CHUNK = 1024
@@ -53,6 +49,7 @@ lo  = 2000
 hi = 32000
 status_icon = statusicon.StatusIcon()
 text_processor = ProcessText.ProcessText()
+reporter = reporter.Reporter()
 log_lo = math.log(lo)
 log_hi = math.log(hi)
 
@@ -60,29 +57,6 @@ def clean_up():
     ''' Clean up, clean up, everybody do your share '''
     os.remove(FLAC_OUTPUT_FILENAME)
 
-
-def report_start_recognition():
-    command = 'vox-osd --splash icons/throbber.gif "Performing Recognition"'
-    args = shlex.split(command)
-    process = subprocess.Popen(args)
-    return process
-
-
-def report_stop_recognition(process):
-    if (process != None):
-       process.kill()
-
-
-def report_failure(msg):
-    n = pynotify.Notification("Error", msg, icon='vox-launcher')
-    n.set_timeout(1000)
-    n.show()
-    
-    
-def report_success(msg):
-    n = pynotify.Notification("Info", "Done", icon='vox-launcher')
-    n.set_timeout(1000)
-    n.show()
 
 def send_recv():
     ''' Encode, send, and receive FLAC file '''
@@ -105,7 +79,7 @@ def send_recv():
     except urllib2.URLError, e:
       error_message = e.reason
       logging.debug(error_message)
-      report_failure("Vox-launcher can't establish a connection to the server")
+      reporter.report_failure("Vox-launcher can't establish a connection to the server")
      
     return ""
     
@@ -194,13 +168,13 @@ def setup_mic():
 
 def handle_response(resp):
     if resp =="":
-        report_failure("Unrecognized command")
+        reporter.report_failure("Unrecognized command")
     else:
         try:
             hypotheses = json.loads(resp)['hypotheses']
         except json.decoder.JSONDecodeError:
             logging.debug( "No response received. Are you beyond a firewall?" )
-            report_error("No response received. Are you beyond a firewall?")
+            reporter.report_error("No response received. Are you beyond a firewall?")
             return       
             
         for index in range(len(hypotheses)):
@@ -216,10 +190,10 @@ def handle_response(resp):
             retp = text_processor.process_text(text, status_icon.get_language())
                     
             if (retp==True):
-                report_success(text)
+                reporter.report_success(text)
                 return;
 
-        report_failure("Unrecognized command")
+        reporter.report_failure("Unrecognized command")
     
 def main():
     # Setup microphone
@@ -257,14 +231,14 @@ def main():
             tend = datetime.now()
             logging.debug( "Finish flac reencoding " + str(tend - tstart) )
             
-            process = report_start_recognition()
+            process = reporter.report_start_recognition()
             
             # Send and receive translation
             resp = send_recv()
             tend = datetime.now()
             logging.debug( "Get google response " + str(tend - tstart) )
             
-            report_stop_recognition(process)
+            reporter.report_stop_recognition(process)
           
             handle_response(resp)
                         
@@ -277,7 +251,6 @@ def init_localization():
 if __name__ == '__main__':
     init_localization()
     logging.basicConfig(level=logging.DEBUG)
-    pynotify.init("vox-launcher")
     status_icon.start()
     atexit.register(clean_up)
     main()
