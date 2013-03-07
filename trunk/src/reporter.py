@@ -19,10 +19,24 @@
 import pynotify
 import shlex, subprocess
 
+sound_folder="/usr/share/sounds/"
+info_sound= sound_folder + "info.wav"
+error_sound= sound_folder + "error.wav"
+
 class Reporter():
 
   def __init__(self):
      pynotify.init("vox-launcher")
+    
+  def acoustic_report_failure(self):
+    command = 'aplay ' + error_sound
+    args = shlex.split(command)
+    process = subprocess.Popen(args)
+    
+  def acoustic_report_success(self):
+    command = 'aplay ' + info_sound
+    args = shlex.split(command)
+    process = subprocess.Popen(args)
         
   def report_start_recognition(self):
     command = 'vox-osd --splash icons/throbber.gif "Performing Recognition"'
@@ -37,12 +51,14 @@ class Reporter():
 
 
   def report_failure(self, msg):
+    self.acoustic_report_failure()
     n = pynotify.Notification("Error", msg, 'dialog-error')
     n.set_timeout(1000)
     n.show()
     
     
   def report_success(self, msg):
+    self.acoustic_report_success()
     n = pynotify.Notification("Info", "Done",'dialog-information')
     n.set_timeout(1000)
     n.show()
