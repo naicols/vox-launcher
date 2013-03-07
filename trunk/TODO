@@ -9,10 +9,9 @@
 ==========================================================================
 
 - Better GUI
-- Sound feedback
+- Emprove recognition accurancy
 - List the available vox command
 - Add help in menu
-- Emprove recognition accurancy
 - Minimize/maximize window so do in easystroke
 - Atspi-2 support
 - LOCK DESKTOP, REBOOT, SHUTDOWN SYSTEM, HIBERNATE

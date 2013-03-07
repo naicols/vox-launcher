@@ -28,9 +28,7 @@ class Reporter():
 
   def __init__(self):
      pynotify.init("vox-launcher")
-     
      n.set_timeout(1000)
-     n.show()
      
     
   def acoustic_report_failure(self):
