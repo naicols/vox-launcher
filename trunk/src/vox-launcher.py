@@ -142,7 +142,7 @@ def capture_audio(inp):
     
     logging.debug( "Recorded " + str(chunk) + "\n" )
     
-    if (chunk > 7):
+    if (chunk > 33):
         return ''.join(sound)
     else:
         return ""
@@ -235,10 +235,9 @@ def main():
             
             # Send and receive translation
             resp = send_recv()
+            reporter.report_stop_recognition(process)            
             tend = datetime.now()
             logging.debug( "Get google response " + str(tend - tstart) )
-            
-            reporter.report_stop_recognition(process)
           
             handle_response(resp)
                         

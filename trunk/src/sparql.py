@@ -29,24 +29,27 @@ endpoint='http://dbpedia.org/sparql'
 class Sparql():
 
   def run(self, item, lang):
-    print "Sparql"+"@"+item+"@"+lang
-    sparql = SPARQLWrapper2(endpoint)
-    query = ('SELECT DISTINCT * WHERE {'
-                    '?item rdfs:label "' + item + '"@en.'
-                    '?item rdfs:comment ?result.'
-                    'FILTER ( lang(?result) = "' + lang + '" )'
-             '}')
-
-    sparql.setQuery(query)
-    res = sparql.query()
     
-    if len(res.bindings)>0:
-      res = res.bindings[0]['result'].value
-      print res
-      command =  "spd-say -l " + lang + " \"" + res + "\""
-      print "@" + command + "@"
-      os.system(command)
-      return True
+    try:
+      sparql = SPARQLWrapper2(endpoint)
+      query = ('SELECT DISTINCT * WHERE {'
+                      '?item rdfs:label "' + item + '"@en.'
+                      '?item rdfs:comment ?result.'
+                      'FILTER ( lang(?result) = "' + lang + '" )'
+               '}')
+
+      sparql.setQuery(query)
+      res = sparql.query()
+      if len(res.bindings)>0:
+        res = res.bindings[0]['result'].value
+        command =  "spd-say -l " + lang + " \"" + res + "\""
+        logging.debug( "Command " + command )
+        os.system(command)
+        return True
+    
+    except:
+      return False
+    
       
     return False
       
