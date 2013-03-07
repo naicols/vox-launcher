@@ -44,10 +44,11 @@ This program is designed to run on Linux and depends on:
 - python-simplejson
 - pynotify
 - speech-dispatcher
+- python-speechd
 
 If you are using ubuntu you can simply run this command: 
 
-  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify speech-dispatcher
+  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify python-speechd speech-dispatcher
  
  
 -------

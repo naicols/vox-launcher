@@ -18,9 +18,9 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-
 from SPARQLWrapper import SPARQLWrapper2, SPARQLWrapper, TURTLE
 import sys, getopt
+import speechd
 
 
 endpoint='http://dbpedia.org/sparql'
@@ -28,6 +28,14 @@ endpoint='http://dbpedia.org/sparql'
 
 class Sparql():
 
+  def speak(self, item, lang):
+    client = speechd.SSIPClient('vox-launcher')
+    client.set_priority(speechd.client.Priority.IMPORTANT)
+    client.set_pause_context(0)
+    client.set_language(lang)
+    client.speak(item)
+    client.close()
+  
   def run(self, item, lang):
     
     try:
@@ -42,9 +50,7 @@ class Sparql():
       res = sparql.query()
       if len(res.bindings)>0:
         res = res.bindings[0]['result'].value
-        command =  "spd-say -l " + lang + " \"" + res + "\""
-        logging.debug( "Command " + command )
-        os.system(command)
+        self.speak(res, lang)
         return True
     
     except:
