@@ -122,7 +122,7 @@ class Grid( threading.Thread ):
         for i in range(grid_cell+1):
             delta_x=0
             for j in range(grid_cell+1):
-                cr.set_source_rgba(1, 1, 1, 0.1)
+                cr.set_source_rgba(1, 0, 0, 0.4)
                 cr.rectangle(self.position_x + delta_x, self.position_y + delta_y, size_cell_x, size_cell_y)
                 cr.stroke()  
                 delta_x = delta_x + size_cell_x
