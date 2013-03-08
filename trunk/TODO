@@ -12,8 +12,8 @@
 - Emprove recognition accurancy
 - List the available vox command
 - Add help in menu
-- Atspi-2 support
 - LOCK DESKTOP, REBOOT, SHUTDOWN SYSTEM, HIBERNATE
+- Atspi-2 support
 - fix redo in libreoffice ctrl+y
 
 - Conf file editor
