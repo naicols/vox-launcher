@@ -35,6 +35,10 @@ class ProcessText():
         self.sparql = sparql.Sparql()
 
 
+    def stop(self):
+        self.grid.stop()
+
+
     def insert_text(self, t, lang):
         command =  "xte \"str " + t + "\""    
         os.system(command)
@@ -154,3 +158,5 @@ class ProcessText():
                 t = text[startpos:]
               status = self.sparql.run(t, lang[:2])
             return status
+            
+        

@@ -22,48 +22,56 @@ import shlex, subprocess
 sound_folder="/usr/share/sounds/"
 info_sound= sound_folder + "info.wav"
 error_sound= sound_folder + "error.wav"
-n = pynotify.Notification("Info", "Started",'dialog-information')
 
+# Class with some usefull methods to report status of the tool to the user.
 class Reporter():
+
+
+  n = pynotify.Notification("Info", "Started",'dialog-information')
+  process = None
+
 
   def __init__(self):
      pynotify.init("vox-launcher")
-     n.set_timeout(1000)
+     self.n.set_timeout(1000)
      
-    
+  
   def acoustic_report_failure(self):
     command = 'aplay ' + error_sound
     args = shlex.split(command)
-    process = subprocess.Popen(args)
+    subprocess.Popen(args)
 
     
   def acoustic_report_success(self):
     command = 'aplay ' + info_sound
     args = shlex.split(command)
-    process = subprocess.Popen(args)
+    subprocess.Popen(args)
 
         
   def report_start_recognition(self):
     command = 'vox-osd --splash icons/throbber.gif "Performing Recognition"'
     args = shlex.split(command)
-    process = subprocess.Popen(args)
-    return process
+    self.process = subprocess.Popen(args)
+    
 
-
-  def report_stop_recognition(self, process):
-    if (process != None):
-       process.kill()
+  def report_stop_recognition(self):
+    if (self.process != None):
+       self.process.kill()
 
 
   def report_failure(self, msg):
     self.acoustic_report_failure()
-    n.update("Error", msg, 'dialog-error')
-    n.show()
+    self.n.update("Error", msg, 'dialog-error')
+    self.n.show()
     
     
   def report_success(self, msg):
     self.acoustic_report_success()
-    n.update("Info", "Done",'dialog-information')
-    n.show()
+    self.n.update("Info", "Done",'dialog-information')
+    self.n.show()
+    
+  def quit(self):
+    self.report_stop_recognition()
+    self.n.close()
 
 

@@ -23,9 +23,11 @@ import sys, getopt
 import speechd
 
 
+# The sparql endpoint.
 endpoint='http://dbpedia.org/sparql'
 
 
+# This class run queryes on the sparql service.
 class Sparql():
 
   def speak(self, item, lang):
@@ -56,7 +58,6 @@ class Sparql():
     except:
       return False
     
-      
     return False
       
 
