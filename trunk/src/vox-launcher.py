@@ -53,17 +53,27 @@ reporter = reporter.Reporter()
 log_lo = math.log(lo)
 log_hi = math.log(hi)
 
+
+# Clean the tool at exit.
 def clean_up():
     ''' Clean up, clean up, everybody do your share '''
-    os.remove(FLAC_OUTPUT_FILENAME)
+    try:
+      os.remove(FLAC_OUTPUT_FILENAME)
+    except OSError:
+      pass
+    
+    text_processor.stop()
+    reporter.quit()
+    
 
-
+# Send the audio file and get the receive.
 def send_recv():
     ''' Encode, send, and receive FLAC file '''
     audio = open(FLAC_OUTPUT_FILENAME, 'rb').read()
     filesize = os.path.getsize(FLAC_OUTPUT_FILENAME)
     
     HTTP_ADDRESS = 'http://www.google.com/speech-api/v1/recognize?lang=' + status_icon.get_language() + '&maxresults=' + str(MAXRESULT)
+                    
     req = urllib2.Request(url=HTTP_ADDRESS)
     req.add_header('Content-type','audio/x-flac; rate=16000')
     req.add_header('Content-length', str(filesize))
@@ -83,6 +93,8 @@ def send_recv():
      
     return ""
     
+
+# Capture audio input.
 def capture_audio(inp):
     sound = []
     
@@ -147,6 +159,8 @@ def capture_audio(inp):
     else:
         return ""
 
+
+# Write the data in a wav file.
 def write_wav(data):
     ''' Write string of data to WAV file of specified name '''
     wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
@@ -156,7 +170,8 @@ def write_wav(data):
     wf.writeframes(data)
     wf.close()
 
-''' Set up mic, capture audio, and return string of the result '''
+
+# Set up mic, capture audio, and return string of the result.
 def setup_mic():
     inp = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL)
     inp.setchannels(CHANNELS)
@@ -166,6 +181,7 @@ def setup_mic():
     return inp
 
 
+# Handle the response.
 def handle_response(resp):
     if resp =="":
         reporter.report_failure("Unrecognized command")
@@ -195,6 +211,7 @@ def handle_response(resp):
 
         reporter.report_failure("Unrecognized command")
     
+# Main.
 def main():
     # Setup microphone
     inp = setup_mic()
@@ -231,21 +248,23 @@ def main():
             tend = datetime.now()
             logging.debug( "Finish flac reencoding " + str(tend - tstart) )
             
-            process = reporter.report_start_recognition()
+            reporter.report_start_recognition()
             
             # Send and receive translation
             resp = send_recv()
-            reporter.report_stop_recognition(process)            
+            reporter.report_stop_recognition()            
             tend = datetime.now()
             logging.debug( "Get google response " + str(tend - tstart) )
           
             handle_response(resp)
                         
-                        
+
+# Init locale.                        
 def init_localization():
-  	LOCALE_DOMAIN = APP_NAME
-  	gettext.textdomain(LOCALE_DOMAIN)
-  	gettext.install(LOCALE_DOMAIN)
+    LOCALE_DOMAIN = APP_NAME
+    gettext.textdomain(LOCALE_DOMAIN)
+    gettext.install(LOCALE_DOMAIN)
+        
                                            
 if __name__ == '__main__':
     init_localization()

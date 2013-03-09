@@ -28,7 +28,9 @@ import math
 from gtk import gdk
 
 
+# Grid; it show a nubered grid; is usefull to move the pointer in a selected area.
 class Grid( threading.Thread ):
+
 
     def __init__(self):
         gtk.gdk.threads_init()
@@ -71,6 +73,7 @@ class Grid( threading.Thread ):
         self.screen_changed(self.win)
         threading.Thread.__init__ ( self )
 
+
     def screen_changed(self, widget, old_screen = None):
         # To check if the display supports alpha channels, get the colormap
         screen = widget.get_screen()
@@ -83,6 +86,7 @@ class Grid( threading.Thread ):
         widget.set_colormap(colormap)
     
         return False
+    
         
     def run(self):
         gtk.gdk.threads_enter()
@@ -93,6 +97,7 @@ class Grid( threading.Thread ):
         gtk.main()
         
         gtk.gdk.threads_leave() 
+              
                
     def put_label(self, cr, i, j):
         letter_x=self.size_x/6
@@ -110,6 +115,7 @@ class Grid( threading.Thread ):
         cr.move_to(delta_x - x_bearing - width / 2, delta_y - y_bearing - height / 2)
         cr.show_text(text)
         cr.stroke()  
+
 
     def show_grid(self, cr):
         cr.set_line_width(2)
@@ -144,6 +150,7 @@ class Grid( threading.Thread ):
         gtk.gdk.keyboard_grab(self.win.get_window())
         return False
 
+
     def select_cell(self,keyname):
         
         try:
@@ -170,16 +177,17 @@ class Grid( threading.Thread ):
         self.win.show_all()
         self.win.fullscreen()
 
+
     def on_key_press(self, widget, event):
         keyname = gtk.gdk.keyval_name(event.keyval)        
         self.select_cell(keyname)    
 
+
     def clicked(self, widget, event):
         gtk.main_quit()
 
+
     def stop(self):
         self.win.destroy()
-
-
 
 
