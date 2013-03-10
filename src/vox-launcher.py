@@ -160,6 +160,7 @@ def capture_audio(inp):
   if (chunk > 33):
     return ''.join(sound)
   else:
+    logging.debug( "Audio package dropped" )
     return ""
 
 
