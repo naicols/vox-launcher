@@ -44,8 +44,6 @@ CHUNK     =  1024
 CHANNELS  =     1
 RATE      = 16000
 MAXRESULT =     6
-LO        =  2000
-HI        = 32000
 
 WAVE_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.wav'
 FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
@@ -53,8 +51,6 @@ FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
 status_icon = statusicon.StatusIcon()
 text_processor = ProcessText.ProcessText()
 reporter = reporter.Reporter()
-log_lo = math.log(LO)
-log_hi = math.log(HI)
 
 
 # Clean the tool at exit.
@@ -95,7 +91,26 @@ def send_recv():
     reporter.report_failure("Vox-launcher can't establish a connection to the server")
    
   return ""
+
+
+def get_current_volume(data):
+  LO        =  2000
+  HI        = 32000
+  log_lo = math.log(LO)
+  log_hi = math.log(HI)
   
+  # transform data to logarithmic scale
+  try:
+    peak = audioop.max(data, 2)
+  except:
+    return -1
+       
+  vu = (math.log(float(max(peak,1)))-log_lo)/(log_hi-log_lo)
+    
+  # transform the scale in the range 0...10
+  current_volume = min(max((vu*10),0),10)
+  return current_volume
+    
 
 # Capture audio input.
 def capture_audio(inp):
@@ -115,18 +130,12 @@ def capture_audio(inp):
     
     if (not l or len(data)==0):
       continue
-      
-    # transform data to logarithmic scale
-    try:
-       peak = audioop.max(data, 2)
-    except:
+    
+    current_volume = get_current_volume(data)
+    
+    if current_volume == -1:
        continue
        
-    vu = (math.log(float(max(peak,1)))-log_lo)/(log_hi-log_lo)
-    
-    # transform the scale in the range 0...10
-    current_volume = min(max((vu*10),0),10)
-    
     if chunk == 0:
        if current_volume < volume_threshold:
          if current_volume != 0:
@@ -183,7 +192,7 @@ def setup_mic():
   inp.setformat(alsaaudio.PCM_FORMAT_S16_LE)
   inp.setperiodsize(CHUNK)
   return inp
-
+  
 
 # Handle the response.
 def handle_response(resp):
@@ -257,12 +266,15 @@ def main():
       
       # Send and receive translation
       resp = send_recv()
-      reporter.report_stop_recognition()      
+      
+      reporter.report_stop_recognition()  
+      
       tend = datetime.now()
       logging.debug( "Get google response " + str(tend - tstart) )
       
       handle_response(resp)
-            
+      
+      
 
 # Init locale.            
 def init_localization():
