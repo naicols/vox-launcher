@@ -3,7 +3,8 @@ Version=1.0
 Type=Application
 Encoding=UTF-8
 Name=vox-launcher
-Icon=vox-launcher.png
-Exec=/usr/bin/vox-launcher
-Categories=Application;Accessibility;Whiteboard
-
+Name[it]=Comandi vocali
+Comment[it]=Comanda il tuo computer con i comandi vocali
+Icon=vox-launcher
+Exec=vox-launcher
+Categories=Application;Accessibility;
