@@ -24,7 +24,9 @@ import pynotify
 import logging
 import grid
 import sparql
+import reporter
 
+reporter = reporter.Reporter.get_instance()
 
 # Associate a string to a command and run it.
 class ProcessText():
@@ -43,21 +45,36 @@ class ProcessText():
       self.is_grid_running = False
 
 
-  def insert_text(self, t, lang):
-    command =  "xte \"str " + t + "\""  
-    os.system(command)
-
-
-  def google_search(self, t):
-    command = "xdg-open \"https://www.google.com/search?q=" + t + "&btnI\""
-    os.system(command)
-  
-   
   def program_exists(self, fname):
     for p in os.environ['PATH'].split(os.pathsep):
       if os.path.isfile(os.path.join(p, fname)):
         return True
     return False
+    
+    
+  def run_command(self, command):
+    progname = command.split(" ")[0]
+    if self.program_exists(progname):
+      subprocess.Popen(command, shell=True)
+      return True
+    else:
+      reporter.report_failure("Command not found \"" + progname + "\"")
+    
+    return False
+
+
+  def insert_text(self, t, lang):
+    command =  "xte \"str " + t + "\""  
+    ret = self.run_command(command)
+    if (ret == True):
+      reporter.report_success(command)
+  
+  
+  def google_search(self, t):
+    command = "xdg-open \"https://www.google.com/search?q=" + t + "&btnI\""
+    ret = self.run_command(command)
+    if (ret == True):
+      reporter.report_success(text)
 
 
   def get_matching_command(self, t, lang, prefix):
@@ -87,21 +104,18 @@ class ProcessText():
     return ""
 
 
-  def open_program(self, t, lang, prefix):
-    command = t
+  def open_program(self, text, lang, prefix):
+    command = text
 
-    new_command = self.get_matching_command(t, lang, prefix)
+    new_command = self.get_matching_command(text, lang, prefix)
     if new_command!="":
       command = new_command
     
     logging.debug( "Command " + command )
-    progname = command.split(" ")[0]
-    
-    if self.program_exists(progname):
-      subprocess.Popen(command, shell=True)
-      return True
-    
-    return False
+    ret = self.run_command(command)
+    if (ret == True):
+      reporter.report_success(command)
+    return ret
    
       
   def process_text(self, text, lang):
@@ -111,6 +125,7 @@ class ProcessText():
         if '0' <= text[:1] <= '9':
           #send command to grid
           self.grid.select_cell(text)
+          reporter.report_success(text)
           return True;
       else:
         self.insert_text(text, lang)
@@ -123,14 +138,14 @@ class ProcessText():
         self.grid = grid.Grid()
       self.grid.start()
       self.is_grid_running = True
+      reporter.report_success(text)
       return True
         
     # Ignore some token in initial position
     if text.startswith('open ') or text.startswith('run ') or text.startswith('apri '):
       startpos = text.find(" ") + 1
       t = text[startpos:]
-      ret = self.open_program(t, lang, text.split(" ")[0].strip())
-      return ret
+      return self.open_program(t, lang, text.split(" ")[0].strip())
     # Keyword in order to go to a web page
     elif text.startswith('vai su ') or text.startswith('go to '):
       startpos = text.find(" ") + 1
@@ -145,7 +160,6 @@ class ProcessText():
       t = text[startpos:]
       self.insert_text(t, lang)
       return True
-    # Unsuccessful; display result
     else:
       status = self.open_program(text, lang, "")
       if self.is_grid_running == True and status == True:
@@ -159,6 +173,9 @@ class ProcessText():
           startpos = text.find("is ") + 1
           t = text[startpos:]
         status = self.sparql.run(t, lang[:2])
+        if (status == True):
+          reporter.report_success(text)
       return status
-      
-    
+    reporter.report_failure(text)
+
+

@@ -26,16 +26,27 @@ error_sound= sound_folder + "error.wav"
 # Class with some usefull methods to report status of the tool to the user.
 class Reporter():
 
-
-  n = pynotify.Notification("Info", "Started",'dialog-information')
+  n = None
   process = None
+  instance = None
 
-
+  # Singleton init.
   def __init__(self):
+     if Reporter.instance!=None:
+        raise Reporter.instance
+     Reporter.instance = self
      pynotify.init("vox-launcher")
+     self.n = pynotify.Notification("Info", "Started",'dialog-information')
      self.n.set_timeout(1000)
+
      
-  
+  @classmethod
+  def get_instance(Reporter):
+     if Reporter.instance is None:
+        Reporter.instance = Reporter()
+     return Reporter.instance
+
+
   def acoustic_report_failure(self):
     command = 'aplay ' + error_sound
     args = shlex.split(command)
@@ -67,7 +78,7 @@ class Reporter():
     
   def report_success(self, msg):
     self.acoustic_report_success()
-    self.n.update("Info", "Done",'dialog-information')
+    self.n.update("Info", msg, 'dialog-information')
     self.n.show()
     
   def quit(self):
