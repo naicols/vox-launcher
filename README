@@ -46,10 +46,11 @@ This program is designed to run on Linux and depends on:
 - speech-dispatcher
 - python-speechd
 - xautomation
+- python-sparqlwrapper
 
 If you are using ubuntu you can simply run this command: 
 
-  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify python-speechd speech-dispatcher xautomation
+  # sudo apt-get install python-dbus python-alsaaudio python-simplejson python-notify python-speechd speech-dispatcher xautomation python-sparqlwrapper
  
  
 -------

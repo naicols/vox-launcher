@@ -11,6 +11,6 @@ Uploaders: Pilolli Pietro <pilolli.pietro@gmail.com>
 
 Package: vox-launcher
 Architecture: all
-Depends: python-gtk2(>=2.16), python-dbus, python-alsaaudio(>=0.5), python-gobject-2(>=2.16), python-simplejson, python-notify, speech-dispatcher, python-speechd, xautomation,
+Depends: python-gtk2(>=2.16), python-dbus, python-alsaaudio(>=0.5), python-gobject-2(>=2.16), python-simplejson, python-notify, speech-dispatcher, python-speechd, xautomation, python-sparqlwrapper,
  ${python:Depends}, ${misc:Depends}
 Description: Control your desktop with voice
