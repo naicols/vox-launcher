@@ -50,7 +50,7 @@ FLAC_OUTPUT_FILENAME = '/tmp/' + APP_NAME + '-recording.flac'
 
 status_icon = statusicon.StatusIcon()
 text_processor = ProcessText.ProcessText()
-reporter = reporter.Reporter()
+reporter = reporter.Reporter.get_instance()
 
 
 # Clean the tool at exit.
@@ -219,10 +219,7 @@ def handle_response(resp):
       retp = text_processor.process_text(text, status_icon.get_language())
           
       if (retp==True):
-        reporter.report_success(text)
         return;
-
-    reporter.report_failure("Unrecognized command")
 
 
 # Main.
