@@ -67,14 +67,14 @@ class ProcessText():
     command =  "xte \"str " + t + "\""  
     ret = self.run_command(command)
     if (ret == True):
-      reporter.report_success(command)
+      reporter.report_success(t)
   
   
   def google_search(self, t):
     command = "xdg-open \"https://www.google.com/search?q=" + t + "&btnI\""
     ret = self.run_command(command)
     if (ret == True):
-      reporter.report_success(text)
+      reporter.report_success(t)
 
 
   def get_matching_command(self, t, lang, prefix):
@@ -114,7 +114,7 @@ class ProcessText():
     logging.debug( "Command " + command )
     ret = self.run_command(command)
     if (ret == True):
-      reporter.report_success(command)
+      reporter.report_success(text)
     return ret
    
       
