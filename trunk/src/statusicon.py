@@ -81,9 +81,7 @@ class StatusIcon( threading.Thread ):
     
     	
   def run(self):
-    self.statusicon.set_from_file("green.png")
     self.statusicon.connect("button-press-event", self.button_press)
-    self.statusicon.set_visible(True)
     gtk.gdk.threads_enter()
     gtk.main()
     gtk.gdk.threads_leave()  
