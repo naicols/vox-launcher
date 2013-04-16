@@ -8,11 +8,14 @@
                         #    ####### ######  #######
 ==========================================================================
 
+
+- enable localization
+- italian localization files
+- plugin reingineering
 - Emprove recognition accurancy
 - List the available vox command
 - Add help in menu
 - better dictation mode
-- new plugin architecture
 - better natural language questioning
   - Support Who is ...? also with surname
 - Atspi-2 support
