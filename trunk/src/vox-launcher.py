@@ -36,6 +36,7 @@ import logging
 import reporter
 
 from datetime import datetime
+from gettext import gettext as _ 
 
 
 APP_NAME='vox-launcher'
@@ -55,7 +56,6 @@ reporter = reporter.Reporter.get_instance()
 
 # Clean the tool at exit.
 def clean_up():
-  ''' Clean up, clean up, everybody do your share '''
   try:
     os.remove(FLAC_OUTPUT_FILENAME)
   except OSError:
@@ -67,7 +67,6 @@ def clean_up():
 
 # Send the audio file and get the receive.
 def send_recv():
-  ''' Encode, send, and receive FLAC file '''
   audio = open(FLAC_OUTPUT_FILENAME, 'rb').read()
   filesize = os.path.getsize(FLAC_OUTPUT_FILENAME)
   
@@ -88,7 +87,8 @@ def send_recv():
   except urllib2.URLError, e:
     error_message = e.reason
     logging.debug(error_message)
-    reporter.report_failure("Vox-launcher can't establish a connection to the server")
+    no_connection=_("Can't establish a connection to the server")
+    reporter.report_failure(no_connection + ".")
    
   return ""
 
@@ -202,8 +202,9 @@ def handle_response(resp):
     try:
       hypotheses = json.loads(resp)['hypotheses']
     except json.decoder.JSONDecodeError:
-      logging.debug( "No response received. Are you beyond a firewall?" )
-      reporter.report_error("No response received. Are you beyond a firewall?")
+      no_response=_("No response received")
+      behind_firewall=_("Are you behind a firewall?")
+      reporter.report_error(no_response + "." + behind_firewall)
       return     
       
     for index in range(len(hypotheses)):
@@ -287,4 +288,4 @@ if __name__ == '__main__':
   atexit.register(clean_up)
   main()
   
-  
+

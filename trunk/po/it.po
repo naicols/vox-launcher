@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Vox-launcher 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-19 12:14+0200\n"
+"POT-Creation-Date: 2013-04-19 10:20+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pilolli Pietro <pilolli.pietro@gmail.com>\n"
 "Language-Team: Ardesia Team <pilolli.pietro@gmail.com>\n"
@@ -14,15 +14,51 @@ msgstr ""
 "X-Poedit-Country: ITALY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../src/statusicon.py:37
+#: ../src/statusicon.py:34
 msgid "Developers :"
 msgstr "Sviluppatori :"
 
-#: ../src/statusicon.py:163
+#: ../src/statusicon.py:170
 msgid "Vox launcher is a simple speech-to-command program."
 msgstr "Vox launcher è un semplice programma per lanciare comandi parlando."
 
-#: ../src/statusicon.py:175
+#: ../src/statusicon.py:182
 #, python-format
 msgid "%s's Website"
 msgstr "sito web di %s"
+
+#: ../src/reporter.py:40
+msgid "Started"
+msgstr "Avviato"
+
+#: ../src/reporter.py:65
+msgid "Performing Recognition"
+msgstr "Sto riconoscendo la voce"
+
+#: ../src/grid.py:85
+msgid "Your screen does not support alpha channels"
+msgstr "Il tuo schermo non supporta i canali alfa"
+
+#: ../src/grid.py:162
+msgid "It is not a valid number"
+msgstr "Non è un numero valido"
+
+#: ../src/grid.py:163
+msgid "Try again"
+msgstr "Riprova"
+
+#: ../src/vox-launcher.py:90
+msgid "Can't establish a connection to the server"
+msgstr "Non possso stabilire una connessione con il server"
+
+#: ../src/vox-launcher.py:205
+msgid "No response received"
+msgstr "Nessuna risposta ricevuta"
+
+#: ../src/vox-launcher.py:206
+msgid "Are you behind a firewall?"
+msgstr "Sei dietro a un firewall?"
+
+#: ../src/ProcessText.py:62
+msgid "Command not found"
+msgstr "Comando non trovato"

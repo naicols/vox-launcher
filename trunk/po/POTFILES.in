@@ -4,4 +4,7 @@
 [encoding: UTF-8]
 
 src/statusicon.py
-
+src/reporter.py
+src/grid.py
+src/vox-launcher.py
+src/ProcessText.py
