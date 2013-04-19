@@ -25,6 +25,7 @@ import logging
 import grid
 import sparql
 import reporter
+from gettext import gettext as _
 
 reporter = reporter.Reporter.get_instance()
 
@@ -58,7 +59,8 @@ class ProcessText():
       subprocess.Popen(command, shell=True)
       return True
     else:
-      reporter.report_failure("Command not found \"" + progname + "\"")
+      command_not_found = _("Command not found")
+      reporter.report_failure(command_not_found + " " + progname + ".")
     
     return False
 

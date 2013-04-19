@@ -50,7 +50,7 @@ class Sparql():
 
       sparql.setQuery(query)
       res = sparql.query()
-      if len(res.bindings)>0:
+      if len(res.bindings) > 0:
         res = res.bindings[0]['result'].value
         self.speak(res, lang)
         return True

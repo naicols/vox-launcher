@@ -26,6 +26,10 @@ import gtk
 import cairo
 import math
 from gtk import gdk
+from gettext import gettext as _
+import reporter
+
+reporter = reporter.Reporter.get_instance()
 
 
 # Grid; it show a nubered grid; is usefull to move the pointer in a selected area.
@@ -35,10 +39,10 @@ class Grid( threading.Thread ):
   def __init__(self):
     gtk.gdk.threads_init()
     
-    self.display=gtk.gdk.display_get_default()
-    self.screen=self.display.get_default_screen()
-    self.screen_width=self.screen.get_width()
-    self.screen_height=self.screen.get_height()
+    self.display = gtk.gdk.display_get_default()
+    self.screen = self.display.get_default_screen()
+    self.screen_width = self.screen.get_width()
+    self.screen_height = self.screen.get_height()
     
     self.win = gtk.Window(gtk.WINDOW_POPUP)
     self.size_x = self.screen_width
@@ -46,7 +50,6 @@ class Grid( threading.Thread ):
     self.position_x = 0
     self.position_y = 0
 
-    self.win.set_title("test")
     self.win.set_app_paintable(True)
     self.win.set_decorated(False)
     self.win.set_skip_taskbar_hint(True)
@@ -79,7 +82,8 @@ class Grid( threading.Thread ):
     screen = widget.get_screen()
     colormap = screen.get_rgba_colormap()
     if colormap == None:
-      print 'Your screen does not support alpha channels!'
+      noalpha = _("Your screen does not support alpha channels")
+      reporter.report_failure(noalpha + ".")
       exit()
   
     # Now we have a colormap appropriate for the screen, use it
@@ -105,8 +109,7 @@ class Grid( threading.Thread ):
     delta_x= self.position_x + ((i *2 + 1) * self.size_x)/6
     delta_y= self.position_y + ((j *2 + 1) * self.size_y)/6
     cr.set_source_rgba(1, 0, 0, 0.5)
-    cr.select_font_face("Purisa",
-    cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
+    cr.select_font_face("Purisa", cairo.FONT_SLANT_NORMAL, cairo.FONT_WEIGHT_BOLD)
     font_size = math.sqrt(pow(letter_x, 2) + pow(letter_y, 2))
     cr.set_font_size(font_size)
     
@@ -120,10 +123,10 @@ class Grid( threading.Thread ):
   def show_grid(self, cr):
     cr.set_line_width(2)
     grid_cell = 2
-    delta_x=0
-    delta_y=0
-    size_cell_x=self.size_x/3
-    size_cell_y=self.size_y/3
+    delta_x = 0
+    delta_y = 0
+    size_cell_x = self.size_x/3
+    size_cell_y = self.size_y/3
     j = 0
     for i in range(grid_cell+1):
       delta_x=0
@@ -156,7 +159,9 @@ class Grid( threading.Thread ):
     try:
       keyn = int(keyname)- 1
     except ValueError:
-      print "Oops!  That was no valid number.  Try again..."
+      no_valid_number = _("It is not a valid number")
+      retry = _("Try again")
+      reporter.report_failure(no_valid_number + "." + retry + ".")
       return
       
     if (keyn==-1):

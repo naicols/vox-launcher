@@ -18,6 +18,7 @@
 
 import pynotify
 import shlex, subprocess
+from gettext import gettext as _ 
 
 sound_folder="/usr/share/sounds/"
 info_sound= sound_folder + "info.wav"
@@ -36,7 +37,8 @@ class Reporter():
         raise Reporter.instance
      Reporter.instance = self
      pynotify.init("vox-launcher")
-     self.n = pynotify.Notification("Info", "Started",'dialog-information')
+     started=_("Started")
+     self.n = pynotify.Notification("Info", started + ".", 'dialog-information')
      self.n.set_timeout(1000)
 
      
@@ -60,7 +62,8 @@ class Reporter():
 
         
   def report_start_recognition(self):
-    command = 'vox-osd --splash icons/throbber.gif "Performing Recognition"'
+    recognition=_("Performing Recognition")
+    command = 'vox-osd --splash icons/throbber.gif ' + "\"" + recognition + ".\""
     args = shlex.split(command)
     self.process = subprocess.Popen(args)
     
