@@ -279,13 +279,18 @@ def init_localization():
   LOCALE_DOMAIN = APP_NAME
   gettext.textdomain(LOCALE_DOMAIN)
   gettext.install(LOCALE_DOMAIN)
-    
+
+# Init library to pass throgh system proxy.            
+def init_proxy():
+  proxy_support = urllib2.ProxyHandler({})
+  opener = urllib2.build_opener(proxy_support)
+  urllib2.install_opener(opener)    
                        
 if __name__ == '__main__':
   init_localization()
+  init_proxy()
   logging.basicConfig(level=logging.DEBUG)
   status_icon.start()
   atexit.register(clean_up)
   main()
   
-
