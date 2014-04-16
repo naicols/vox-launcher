@@ -40,6 +40,7 @@ This program is designed to run on Linux and depends on:
 - python-gtk2(>=2.16)
 - python-dbus
 - python-alsaaudio(>=0.5)
+- python-xlib
 - python-gobject-2(>=2.16)
 - python-simplejson
 - pynotify
