@@ -84,13 +84,15 @@ def send_recv():
   except urllib2.HTTPError, e:
     error_message = e.read()
     logging.debug(error_message.lower().split('<title>')[1].split('</title>')[0])
+    no_connection=_("Can't establish a connection to the server")
+    reporter.report_failure(no_connection + ".")
   except urllib2.URLError, e:
     error_message = e.reason
     logging.debug(error_message)
     no_connection=_("Can't establish a connection to the server")
     reporter.report_failure(no_connection + ".")
    
-  return ""
+  return None
 
 
 def get_current_volume(data):
@@ -139,7 +141,7 @@ def capture_audio(inp):
     if chunk == 0:
        if current_volume < volume_threshold:
          if current_volume != 0:
-          logging.debug( "Dropped package with volume " + str(current_volume) )
+           logging.debug( "Dropped package with volume " + str(current_volume) )
          continue
      
     else:
@@ -166,7 +168,7 @@ def capture_audio(inp):
   
   logging.debug( "Recorded " + str(chunk) + "\n" )
   
-  if (chunk > 33):
+  if (chunk > 16):
     return ''.join(sound)
   else:
     logging.debug( "Audio package dropped" )
@@ -211,11 +213,11 @@ def handle_response(resp):
       values = hypotheses[index].values()
           
       if len(values)==1:
-          text = values[0]
-          logging.debug( "Result \"" + text + "\" with unknown confidence" )
+        text = values[0]
+        logging.debug( "Result \"" + text + "\" with unknown confidence" )
       else:
-          confidence, text = values
-          logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
+        confidence, text = values
+        logging.debug( "Result \"" + text + "\" with confidence " + str(confidence) )
       
       retp = text_processor.process_text(text, status_icon.get_language())
           
@@ -248,7 +250,7 @@ def main():
     tend = datetime.now()
     logging.debug( "Finish data capture " + str(tend - tstart) )
     
-    if data!="":
+    if data != "":
       # write to WAV file
       write_wav(data)
    
@@ -267,13 +269,12 @@ def main():
       
       reporter.report_stop_recognition()  
       
-      tend = datetime.now()
-      logging.debug( "Get google response " + str(tend - tstart) )
+      if resp != None: 
+        tend = datetime.now()
+        logging.debug( "Get google response " + str(tend - tstart) )
+        handle_response(resp)
       
-      handle_response(resp)
       
-      
-
 # Init locale.            
 def init_localization():
   LOCALE_DOMAIN = APP_NAME
