@@ -47,6 +47,7 @@ This program is designed to run on Linux and depends on:
 - python-speechd
 - xautomation
 - python-sparqlwrapper
+- sox
 
 If you are using ubuntu you can simply run this command: 
 
